@@ -1,5 +1,5 @@
-
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class proj1 {	
@@ -77,42 +77,94 @@ public class proj1 {
 		}
 	}
 	
+	public String processLine(String[] s){
+	
+		String builder = "";
+		
+		for(int i = 0; i < s.length; i++){
+            if(s[i].matches("[a-zA-Z0-9]+")){
+            	int pos = findPosition(s[i]);
+            	
+            	if(pos < 0){
+            		addToFront(s[i]);
+            	} else{
+            		s[i] = String.valueOf(pos);
+            		String temp = remove(pos);
+            		addToFront(temp);
+            	}
+            } else{
+            	builder += s[i];
+            }
+		}
+		return builder;
+	}
+		
 	public void compressFile() throws IOException{
     	Scanner sc = new Scanner(System.in);
         String line;
         int bytes = 0;
+        int finalBytes = 0;
         
-        System.out.printf("0 ");
+        //Test for compressed
+        line = sc.nextLine();
+        String[] test = line.split("(?=[^a-zA-Z0-9])|(?<=[^a-zA-Z0-9])");
+        if(test[0].equals("0")){
+        	
+        	  //Path for decompression
+        	finalBytes += line.length();
+        	test = Arrays.copyOfRange(test, 2, test.length);
+        	String tBuilder = processLine(test);
+        	bytes += tBuilder.length();
+        	System.out.println(tBuilder);
+        	
+        	while(sc.hasNextLine()){
+            	line = sc.nextLine();
+            	finalBytes += line.length();
+            	test = line.split("(?=[^a-zA-Z0-9])|(?<=[^a-zA-Z0-9])");
+            	
+            	//Check for end
+            	if(test[0].equals("0")){
+            		break;
+            	}
+            	
+                tBuilder = processLine(test); 
+                bytes += tBuilder.length();
+                
+                
+              System.out.println(tBuilder);
+                
+            }
+        	System.out.printf("0 Uncompressed: %d  Compressed: %d bytes\n", bytes, finalBytes);
+        	sc.close();
+        	
+        } else{ 
         
-        while(sc.hasNextLine()){
-        	line = sc.nextLine();
-            String[] split = line.split("(?=[^a-zA-Z0-9])|(?<=[^a-zA-Z0-9])");
-            String builder = "";
+        	//Path for compression
+        	System.out.printf("0 ");
+        	while(sc.hasNextLine()){
+        		line = sc.nextLine();
+        		bytes += line.length();
+        		String[] split = line.split("(?=[^a-zA-Z0-9])|(?<=[^a-zA-Z0-9])");
+        	
+        		if(split[0].equals("0")){
+        			break;
+        		}
+        	
+        		String builder = processLine(split); 
+        		finalBytes += builder.length();
             
-            for(int i = 0; i < split.length; i++){
-                if(split[i].matches("[a-zA-Z0-9]+")){
-                	int pos = findPosition(split[i]);
-                	
-                	if(pos < 0){
-                		addToFront(split[i]);
-                	} else{
-                		split[i] = String.valueOf(pos);
-                		String temp = remove(pos);
-                		addToFront(temp);
-                	}
-                	bytes += split[i].length();
-                	builder += split[i];
-                } else{
-                	builder += split[i];
-                	bytes++;
-                }
-            }       
-          System.out.println(builder);
             
-       }
-        System.out.printf("0 Compressed: %d bytes\n", bytes);
-        sc.close();
+        		System.out.println(builder);
+            
+        	}
+        	System.out.printf("0 Uncompressed: %d  Compressed: %d bytes\n", bytes, finalBytes);
+        	sc.close();
+        
+        }
     }
+	
+	
+	
 	
 	public static void main(String[] args) {
         proj1 link = new proj1();
