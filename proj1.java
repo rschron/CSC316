@@ -1,11 +1,27 @@
-
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Scanner;
 
-public class proj1 {	
+/**
+ * This class will read input from stdin and output to stdout either
+ * a compressed or decompressed version of the input depending on the initial 
+ * input state.  In the case of compression, it will also provide an analysis
+ * of the efficacy of the compression algorithm.  The algorithm employed by
+ * this program is a move to front algorithm implemented using a linked list.
+ * @author RSC
+ */
+
+public class proj1 {
+	/** A reference to the front of the linked list **/
 	static Node head = null;
-		
+	
+	/**
+	 * The method will take an input string and search for it in the
+	 * linked list.  If found, it will return the position of the string, otherwise
+	 * it will return -1.
+	 * @param s String to look for.
+	 * @return int position in list.
+	 */
 	int findPosition(String s){
 		Node temp = head;
 		int count = 1;
@@ -21,13 +37,23 @@ public class proj1 {
 		
 		return -1;
 	}
-		
+	
+	/**
+	 * Creates a node for the linked list with the given string and
+	 * adds it to the front of the list.
+	 * @param s String to add to the list.
+	 */
 	void addToFront(String s){
 		Node newNode = new Node(s);
 		newNode.next = head;
 		head = newNode;
 	}
 	
+	/**
+	 * Returns the current size of the list.  This method is used for testing
+	 * purposes.
+	 * @return int size of linked list.
+	 */
 	int getSize(){
 		int i = 0;
 		Node temp = head;
@@ -39,6 +65,11 @@ public class proj1 {
 		return i;
 	}
 	
+	/**
+	 * Removes a node from the list at the given position.
+	 * @param pos position of node to remove.
+	 * @return String item in the removed node.
+	 */
 	String remove(int pos){
 		Node prev = head;
 		
@@ -59,6 +90,9 @@ public class proj1 {
 		}
 	}
 
+	/**
+	 * Prints the entire list.  Method is used for testing.
+	 */
 	void printList(){
 		Node temp = head;
 		
@@ -68,16 +102,32 @@ public class proj1 {
 		}
 	}
 	
+	/**
+	 * Inner class that represents a single node in the list.
+	 * @author RSC
+	 *
+	 */
 	private class Node{
 		String s;
 		Node next;
-			
+		
+		/**
+		 * Creates a node with the given string.
+		 * @param s string to populate the node with.
+		 */
 		public Node(String s){
 			this.s = s;
 			next = null;
 		}
 	}
 	
+	/**
+	 * Takes an array of strings as an arg and adds words to the list as needed. In
+	 * the case the word is already in the list, the item will be replaced by its position
+	 * in the list, thereby compressing the string.  The new, compressed string is returned.
+	 * @param s string array to compress.
+	 * @return compressed string.
+	 */
 	public String compressLine(String[] s){
 		
 		String builder = "";
@@ -102,6 +152,13 @@ public class proj1 {
 		return builder;
 	}
 	
+	/**
+	 * Takes a string array as an arg from a compressed line, and performs decompression.
+	 * If a number is encountered, that string at that position is moved to the front of the
+	 * list and the number is replaced with the string. 
+	 * @param s string array to decompress.
+	 * @return decompressed string.
+	 */
 	public String decompressLine(String[] s){
 			
 			String builder = "";
@@ -124,7 +181,13 @@ public class proj1 {
 			return builder;
 		}
 	
-	public void compressFile() throws IOException{
+	/**
+	 * Reads input from stdin by line, and splits the line into substrings.  This array
+	 * of strings is then passed to the appropriate function for compression or decompression,
+	 * and then written to stdout.  Method also performs compression efficacy analysis.
+	 * @throws IOException
+	 */
+	public void processFile() throws IOException{
     	Scanner sc = new Scanner(System.in);
         String line;
         int uncompressedBytes = 0;
@@ -191,7 +254,7 @@ public class proj1 {
         proj1 link = new proj1();
         
         try{
-        	link.compressFile();
+        	link.processFile();
         } catch(IOException e){
         	e.printStackTrace();
         }
