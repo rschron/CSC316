@@ -204,7 +204,6 @@ public class proj1 {
         	System.out.print(tBuilder);
         	
         	while(sc.hasNextLine()){
-        		System.out.println();
             	line = sc.nextLine();
             	test = line.split("(?=[^a-zA-Z0-9])|(?<=[^a-zA-Z0-9])");
             	
@@ -212,7 +211,7 @@ public class proj1 {
             	if(test[0].equals("0")){
             		break;
             	}
-            	
+              System.out.println();
               tBuilder = decompressLine(test); 
               System.out.print(tBuilder);
                 
