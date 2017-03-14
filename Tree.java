@@ -3,8 +3,8 @@ package tree;
 import java.util.Scanner;
 
 public class Tree<T> {
-	String[] pretrav;
-	String[] posttrav;
+	String[] pretrav =  {"D", "H", "B", "G", "M", "W", "F", "T", "X", "Z", "C", "R", "P", "Q", "N"};
+	String[] posttrav = {"G", "M", "W", "F", "B", "X", "Z", "T", "R", "P", "C", "H", "N", "Q", "D"};
 	Node<T> root = null;
 	
 	
@@ -16,27 +16,24 @@ public class Tree<T> {
 			return null;
 		}
 		
-		if(pretrav[prestart].equals(posttrav[size-1])){
-			Node<T> child = (Node<T>) new Node<String>(pretrav[prestart]);
-			size--;
-			prestart++;
-			child.setChild(buildTree(size, prestart, poststart));
-		} else if(size == 0){
-			return null;	
-		}else{
-			//find size
-			int i;
-			for(i = 0; i < size; i++){
-				if(pretrav[prestart].equals(posttrav[i])){
-					
-					root.setChild(buildTree(i+1, prestart, poststart));
-					prestart = i+1;
+		Node<T> child = (Node<T>) new Node<String>(pretrav[prestart]);
+		prestart++;
+		size--;
+		
+		
+		int i;
+		for(int j = prestart; j <= size; j+= i){
+			for(i = poststart; i < size; i++){
+				if(pretrav[j].equals(posttrav[i])){
+					break;
 				}
 			}
+			child.setChild(buildTree(i+1, j, i));
+			poststart = i + 1;
 		}
 		
 		
-		return root;
+		return child;
 	}
 	
 	public void findNode(Node<T> node){
@@ -46,15 +43,10 @@ public class Tree<T> {
 	
 	public void traverse(Node<T> base){
 		
-		base = (Node<T>) root;
-		
 		for(Node<T> child: base.children){
-			if(child == null){
-				System.out.println(root.data);
-			} else{
-				traverse(child);
-			}
+			traverse(child);
 		}
+		System.out.println(base.data);
 	}
 	
 	public static void main(String args[]){
@@ -65,6 +57,8 @@ public class Tree<T> {
 		Scanner sc = new Scanner(System.in);
 		int orderSize;
 		*/
+		
+		/*
 		String pre = " D, H, B, G, M, W, F, T, X, Z, C, R, P, Q, N.";
 		String post =  "G, M, W, F, B, X, Z, T, R, P, C, H, N, Q, D.";
 		
@@ -72,6 +66,8 @@ public class Tree<T> {
 		
 		tree.pretrav = pre.split(delims);
 		tree.posttrav = post.split(delims);
+		*/
+		
 		int orderSize = tree.pretrav.length;
 		
 		tree.root = tree.buildTree(orderSize, 0, 0);
