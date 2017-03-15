@@ -5,8 +5,9 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 public class Tree<T> {
-	String[] pretrav =  {"D", "H", "B", "G", "M", "W", "F", "T", "X", "Z", "C", "R", "P", "Q", "N"};
-	String[] posttrav = {"G", "M", "W", "F", "B", "X", "Z", "T", "R", "P", "C", "H", "N", "Q", "D"};
+	String[] pretrav = new String[100]; //= {"D", "H", "B", "G", "M", "W", "F", "T", "X", "Z", "C", "R", "P", "Q", "N"};
+	String[] posttrav = new String [100]; //= {"G", "M", "W", "F", "B", "X", "Z", "T", "R", "P", "C", "H", "N", "Q", "D"};
+	
 	public Node<T> root = null;
 	
 	
@@ -14,11 +15,9 @@ public class Tree<T> {
 	@SuppressWarnings("unchecked")
 	public Node<T> buildTree(int size, int prestart, int poststart){
 		
-		
-		
 		Node<T> child = (Node<T>) new Node<String>(pretrav[prestart]);
 		
-		if(size <= 1){
+		if(size == 1){
 			return child;
 		}
 		
@@ -27,19 +26,18 @@ public class Tree<T> {
 		
 		int newSize;
 		int i;
-		for(int j = 0; j <= size; j+= newSize){
-			for(i = 0; i < size; i++){
-				if(pretrav[j + prestart].equals(posttrav[i + poststart])){
+		for(int j = prestart; j <= (size + prestart - 1); j+= newSize){
+			for(i = poststart; i < (size + poststart); i++){
+				if(pretrav[j].equals(posttrav[i])){
 					break;
 				}
 			}
-			newSize = i+1;
+			newSize = i - poststart + 1;
 			
-			Node<T> temp = buildTree(newSize, prestart + j, poststart + i);
+			Node<T> temp = buildTree(newSize,j,poststart);
+			poststart += newSize;
 			child.setChild(temp);
 			temp.setParent(child);
-			poststart += newSize;
-			prestart += newSize;
 		}
 		
 		
@@ -97,22 +95,32 @@ public class Tree<T> {
 		
 		Tree<String> tree = new Tree<>();
 		
-		/*
 		Scanner sc = new Scanner(System.in);
 		int orderSize;
-		*/
 		
-		/*
-		String pre = " D, H, B, G, M, W, F, T, X, Z, C, R, P, Q, N.";
-		String post =  "G, M, W, F, B, X, Z, T, R, P, C, H, N, Q, D.";
 		
-		String delims = "[ ,]+";
+		String pre = sc.nextLine();
+		String post = sc.nextLine();
+		
+		String delims = "[ <>,.]+";
 		
 		tree.pretrav = pre.split(delims);
 		tree.posttrav = post.split(delims);
-		*/
 		
-		int orderSize = tree.pretrav.length;
+		System.out.println("Preorder:");
+		for(int i = 0; i < tree.pretrav.length; i++){
+			System.out.printf("%s ", tree.pretrav[i]);
+		}
+		
+		System.out.println();
+		System.out.println("Postorder:");
+		for(int i = 0; i < tree.posttrav.length; i++){
+			System.out.printf("%s ", tree.posttrav[i]);
+		}
+		
+		
+		orderSize = tree.pretrav.length;
+		
 		
 		tree.root = tree.buildTree(orderSize, 0, 0);
 		System.out.println("Preorder:");
@@ -124,7 +132,7 @@ public class Tree<T> {
 		System.out.println("Level Order:");
 		tree.levelOrder(tree.root);
 		
-		//sc.close();
+		sc.close();
 		
 	}
 	
