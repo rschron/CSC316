@@ -27,8 +27,10 @@ public class UpTree {
 	}
 	
 	public void makeSet(int val){
-		tree[val] = -1;
-		components++;
+		if(tree[val] != -1){
+			tree[val] = -1;
+			components++;
+		}
 	}
 	
 	public int getComponents(){
@@ -41,5 +43,9 @@ public class UpTree {
 	
 	public int getSize(int i){
 		return tree[find(i)];
+	}
+	
+	public int getSetSize(){
+		return tree.length;
 	}
 }

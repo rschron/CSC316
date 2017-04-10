@@ -5,12 +5,6 @@ public class Heap {
 	private Record[] heap = new Record[5000];
 	private int heapSize = 0;
 	
-	/**
-	public void setRoot(Record r){
-		heap[0] = r;
-		heapSize++;
-	}
-	**/
 	public int getSize(){
 		return heapSize;
 	}
@@ -78,7 +72,11 @@ public class Heap {
 	
 	public void printHeap(){
 		for(int i = 0; i < heapSize; i++){
-			System.out.printf("%d %d\n", heap[i].v1, heap[i].v2);
+			if(heap[i].v1 <= heap[i].v2){
+				System.out.printf("%4d %4d\n", heap[i].v1, heap[i].v2);
+			} else{
+				System.out.printf("%4d %4d\n", heap[i].v2, heap[i].v1);
+			}
 		}
 	}
 	
