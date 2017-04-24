@@ -6,8 +6,24 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
+/**
+ * Main entry point for the program.  Calls the Hash.java file to handle the hash table data structure
+ * and associated ADT.
+ * 
+ * This program prompts the user for a dictionary text file, input text file, and output text file
+ * at the start of the program.
+ * 
+ * The code resides in a package called source.
+ * @author Ryan Schron
+ *
+ */
 public class SpellChecker {	
 
+	/**
+	 * Combines a string of words into a single string separated by spaces.
+	 * @param words array of Strings
+	 * @return String
+	 */
 	public String combine(String[] words){
 		String newString = "";
 		for(int i = 0; i < words.length; i++){
@@ -18,13 +34,21 @@ public class SpellChecker {
 	}
 	
 	public static void main(String[] args) {
-		//SpellChecker s = new SpellChecker();
 		Hash hashTable = new Hash();
+		Scanner sc = new Scanner(System.in);
 		
-		//int probes = 0;
+		//Set counters for performance metrics
 		int wordsInDict = 0;
 		int inputWordCount = 0;
 		int mispelledCount = 0;
+		
+		//Get file information from the user
+		System.out.println("Enter dictionary file path: ");
+		String dictName = sc.nextLine();
+		System.out.println("Enter input file path: ");
+		String inputFileName = sc.nextLine();
+		System.out.println("Enter output file path: ");
+		String outputFileName = sc.nextLine();
 		
 		//Read in word data base
 		String line;
@@ -33,7 +57,7 @@ public class SpellChecker {
 		FileReader fr = null;
 		
 		try{
-			fr = new FileReader(args[0]);
+			fr = new FileReader(dictName);
 			br = new BufferedReader(fr);
 			
 			while((line = br.readLine()) != null){
@@ -53,10 +77,10 @@ public class SpellChecker {
 		
 		//Start checking the input file
 		try{
-			fr = new FileReader(args[1]);
+			fr = new FileReader(inputFileName);
 			br = new BufferedReader(fr);
 			
-			FileWriter fw = new FileWriter(args[2]);
+			FileWriter fw = new FileWriter(outputFileName);
 			BufferedWriter bw = new BufferedWriter(fw);
 			
 			while((line = br.readLine()) != null){
@@ -150,10 +174,12 @@ public class SpellChecker {
 			bw.newLine();
 			bw.write("Average probes per lookup: " + ((double)hashTable.getProbes()/(double)hashTable.getLookups()));
 			
+			//Close readers and writers
 			br.close();
 			fr.close();
 			bw.close();
 			fw.close();
+			
 		} catch(IOException e){
 			e.printStackTrace();
 		}
